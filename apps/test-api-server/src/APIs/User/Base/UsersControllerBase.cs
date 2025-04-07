@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestApi.APIs;
 using TestApi.APIs.Common;
@@ -21,6 +22,7 @@ public abstract class UsersControllerBase : ControllerBase
     /// Create one User
     /// </summary>
     [HttpPost()]
+    [Authorize(Roles = "user")]
     public async Task<ActionResult<User>> CreateUser(UserCreateInput input)
     {
         var user = await _service.CreateUser(input);
@@ -32,6 +34,7 @@ public abstract class UsersControllerBase : ControllerBase
     /// Delete one User
     /// </summary>
     [HttpDelete("{Id}")]
+    [Authorize(Roles = "user")]
     public async Task<ActionResult> DeleteUser([FromRoute()] UserWhereUniqueInput uniqueId)
     {
         try
@@ -50,6 +53,7 @@ public abstract class UsersControllerBase : ControllerBase
     /// Find many Users
     /// </summary>
     [HttpGet()]
+    [Authorize(Roles = "user")]
     public async Task<ActionResult<List<User>>> Users([FromQuery()] UserFindManyArgs filter)
     {
         return Ok(await _service.Users(filter));
@@ -68,6 +72,7 @@ public abstract class UsersControllerBase : ControllerBase
     /// Get one User
     /// </summary>
     [HttpGet("{Id}")]
+    [Authorize(Roles = "user")]
     public async Task<ActionResult<User>> User([FromRoute()] UserWhereUniqueInput uniqueId)
     {
         try
@@ -84,6 +89,7 @@ public abstract class UsersControllerBase : ControllerBase
     /// Update one User
     /// </summary>
     [HttpPatch("{Id}")]
+    [Authorize(Roles = "user")]
     public async Task<ActionResult> UpdateUser(
         [FromRoute()] UserWhereUniqueInput uniqueId,
         [FromQuery()] UserUpdateInput userUpdateDto
@@ -102,6 +108,7 @@ public abstract class UsersControllerBase : ControllerBase
     }
 
     [HttpGet("users/{UserId}")]
+    [Authorize(Roles = "user")]
     public async Task<UserViewOutput> ViewUser([FromBody()] UserViewInput userViewInputDto)
     {
         return await _service.ViewUser(userViewInputDto);
